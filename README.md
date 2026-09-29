@@ -78,4 +78,4 @@ Estos elementos están dentro del MVP, pero el diseño actual solo muestra su í
 
 - **Menú de hamburguesa:** opciones que abre.
 - **Íconos de audio y lectura:** pantalla o acción a la que llevan.
-- **Calificación:** si es solo informativa o si el usuario puede calificar.
+- **Calificación:** si es solo informativa o si el usuario puede calificar.....
