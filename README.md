@@ -9,7 +9,7 @@ Aplicación móvil iOS para explorar un catálogo de libros, consultar su inform
 
 ## MVP
 
-El MVP es la versión mínima que permite completar el recorrido principal del usuario: iniciar sesión, explorar el catálogo y consultar el detalle de un libro.
+
 
 ### Pantalla 1: Inicio de sesión
 - Logo y lema de la app.
