@@ -5,7 +5,9 @@
 //  Created by Facultad de Contaduría y Administración on 24/09/26.
 //
 
-struct Book {
+struct Book: Identifiable {
+    var id: String { titulo }
+
     let titulo: String
     let autor: String
     let año: Int
@@ -30,12 +32,3 @@ extension Book {
         portadaUrl: "https://covers.openlibrary.org/b/id/12645114-L.jpg"
     )
 }
-
-
-//
-//  Book.swift
-//  Bookify
-//
-//  Created by Facultad de Contaduría y Administración on 24/09/26.
-//
-

@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct BookifyApp: App {
+    @State private var estado = AppState()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(estado)
         }
     }
 }
