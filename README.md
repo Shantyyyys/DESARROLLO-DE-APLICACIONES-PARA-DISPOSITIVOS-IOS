@@ -16,12 +16,17 @@ Aplicación móvil iOS para explorar un catálogo de libros, consultar su inform
 - Campo de correo electrónico.
 - Campo de contraseña.
 - Botón "Iniciar sesión".
+- <img width="660" height="1434" alt="IMG_5203" src="https://github.com/user-attachments/assets/e268e1cf-ed33-4aca-9ba5-e527bb5de907" />
+
 
 ### Pantalla 2: Catálogo
 - Barra de búsqueda funcional ("¿Qué quieres leer hoy?").
 - Menú de hamburguesa.
 - Sección "Descubrir más...".
 - Sección "Favoritos".
+- <img width="660" height="1434" alt="IMG_5204" src="https://github.com/user-attachments/assets/ed10a300-29db-44ce-b420-0a04df2945bb" />
+
+
 
 ### Pantalla 3: Detalle del libro
 - Portada y título.
@@ -31,6 +36,8 @@ Aplicación móvil iOS para explorar un catálogo de libros, consultar su inform
 - Botón de regreso al catálogo.
 - Marcador para guardar el libro en Favoritos.
 - Íconos de audio y de lectura.
+- <img width="660" height="1434" alt="IMG_5205" src="https://github.com/user-attachments/assets/8c8c3e86-5306-4c5b-bfc6-13323175ce60" />
+
 
 ## Flujo principal
 
