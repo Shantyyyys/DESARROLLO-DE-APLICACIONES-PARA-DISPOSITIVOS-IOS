@@ -2,7 +2,7 @@ import Observation
 
 @Observable
 final class AppState {
-    var books: [Book] = [Book.example]
+    var books: [Book] = [Book.example, Book.example2, Book.theMiserable, Book.tregua]
     var favorites: Set<String> = []
 
     func isFavorite(_ book: Book) -> Bool {
