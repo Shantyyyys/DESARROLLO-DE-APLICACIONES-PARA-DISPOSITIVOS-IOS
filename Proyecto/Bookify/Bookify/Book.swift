@@ -32,3 +32,45 @@ extension Book {
         coverUrl: "https://covers.openlibrary.org/b/id/12645114-L.jpg"
     )
 }
+
+extension Book {
+    static let example2 = Book(
+        title: "Hábitos Atomicos",
+        author: "Santiago Mendez Del Valle",
+        year: 2026,
+        gender: "Crecimiento personal",
+        language: "Español",
+        pages: 471,
+        rating: 5.0,
+        audio: true,
+        coverUrl: "https://covers.openlibrary.org/b/id/12645114-L.jpg"
+    )
+}
+
+extension Book {
+    static let theMiserable = Book(
+        title: "Los Miserables",
+        author: "Victor Hugo",
+        year: 1862,
+        gender: "Novela",
+        language: "Español",
+        pages: 471,
+        rating: 5.0,
+        audio: true,
+        coverUrl: "https://covers.openlibrary.org/b/id/12645114-L.jpg"
+    )
+}
+
+extension Book {
+    static let tregua = Book(
+        title: "LaTregua",
+        author: "Mario Benedetti",
+        year: 1960,
+        gender: "Novela",
+        language: "Español",
+        pages: 561,
+        rating: 5.0,
+        audio: true,
+        coverUrl: "https://covers.openlibrary.org/b/id/12645114-L.jpg"
+    )
+}
