@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isLoggedIn = false
+    let catalogoViewModel: CatalogoViewModel
 
     var body: some View {
         if isLoggedIn {
-            CatalogoView()
+            CatalogoView(viewModel: catalogoViewModel)
         } else {
             LoginView(isLoggedIn: $isLoggedIn)
         }
@@ -20,6 +21,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .environment(AppState())
+    let state = AppState()
+    ContentView(catalogoViewModel: CatalogoViewModel(state: state, bookService: MockBookService()))
+        .environment(state)
 }

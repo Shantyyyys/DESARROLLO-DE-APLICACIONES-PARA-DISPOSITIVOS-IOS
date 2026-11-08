@@ -13,6 +13,7 @@ struct BookifyApp: App {
     /// Contenedor de SwiftData: guarda los favoritos en el dispositivo.
     let container: ModelContainer
     @State private var state: AppState
+    @State private var catalogoViewModel: CatalogoViewModel
 
     init() {
         let container: ModelContainer
@@ -25,12 +26,20 @@ struct BookifyApp: App {
 
         // AppState recibe el almacén de favoritos desde afuera (inyección de dependencias).
         let favoritesStore = SwiftDataFavoritesStore(context: container.mainContext)
-        _state = State(initialValue: AppState(favoritesStore: favoritesStore))
+        // Arranca sin libros locales: el catálogo real llega de Open Library.
+        let appState = AppState(books: [], favoritesStore: favoritesStore)
+        _state = State(initialValue: appState)
+
+        // El ViewModel recibe el servicio real (inyección de dependencias).
+        _catalogoViewModel = State(initialValue: CatalogoViewModel(
+            state: appState,
+            bookService: BookService()
+        ))
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(catalogoViewModel: catalogoViewModel)
                 .environment(state)
         }
         .modelContainer(container)

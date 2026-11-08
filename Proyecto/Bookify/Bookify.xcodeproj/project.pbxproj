@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		A20967F2309D3F3A00442A71 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A203CB643065E44400C4F692 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A203CB6B3065E44400C4F692;
+			remoteInfo = Bookify;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		A203CB6C3065E44400C4F692 /* Bookify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20967EE309D3F3A00442A71 /* BookifyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookifyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = Bookify;
 			sourceTree = "<group>";
 		};
+		A20967EF309D3F3A00442A71 /* BookifyTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BookifyTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A203CB693065E44400C4F692 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A20967EB309D3F3A00442A71 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				A203CB6E3065E44400C4F692 /* Bookify */,
+				A20967EF309D3F3A00442A71 /* BookifyTests */,
 				A203CB6D3065E44400C4F692 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				A203CB6C3065E44400C4F692 /* Bookify.app */,
+				A20967EE309D3F3A00442A71 /* BookifyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = A203CB6C3065E44400C4F692 /* Bookify.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A20967ED309D3F3A00442A71 /* BookifyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A20967F4309D3F3A00442A71 /* Build configuration list for PBXNativeTarget "BookifyTests" */;
+			buildPhases = (
+				A20967EA309D3F3A00442A71 /* Sources */,
+				A20967EB309D3F3A00442A71 /* Frameworks */,
+				A20967EC309D3F3A00442A71 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A20967F3309D3F3A00442A71 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A20967EF309D3F3A00442A71 /* BookifyTests */,
+			);
+			name = BookifyTests;
+			packageProductDependencies = (
+			);
+			productName = BookifyTests;
+			productReference = A20967EE309D3F3A00442A71 /* BookifyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +130,10 @@
 				TargetAttributes = {
 					A203CB6B3065E44400C4F692 = {
 						CreatedOnToolsVersion = 26.6;
+					};
+					A20967ED309D3F3A00442A71 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = A203CB6B3065E44400C4F692;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				A203CB6B3065E44400C4F692 /* Bookify */,
+				A20967ED309D3F3A00442A71 /* BookifyTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A203CB6A3065E44400C4F692 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A20967EC309D3F3A00442A71 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A20967EA309D3F3A00442A71 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A20967F3309D3F3A00442A71 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A203CB6B3065E44400C4F692 /* Bookify */;
+			targetProxy = A20967F2309D3F3A00442A71 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A203CB773065E44500C4F692 /* Debug */ = {
@@ -251,6 +326,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BVHFFJ4UM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -282,6 +358,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BVHFFJ4UM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -306,6 +383,48 @@
 			};
 			name = Release;
 		};
+		A20967F5309D3F3A00442A71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BVHFFJ4UM;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = FCA.BookifyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bookify.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bookify";
+			};
+			name = Debug;
+		};
+		A20967F6309D3F3A00442A71 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5BVHFFJ4UM;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = FCA.BookifyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bookify.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bookify";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -323,6 +442,15 @@
 			buildConfigurations = (
 				A203CB7A3065E44500C4F692 /* Debug */,
 				A203CB7B3065E44500C4F692 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A20967F4309D3F3A00442A71 /* Build configuration list for PBXNativeTarget "BookifyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A20967F5309D3F3A00442A71 /* Debug */,
+				A20967F6309D3F3A00442A71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
