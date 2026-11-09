@@ -20,7 +20,7 @@ final class CatalogoViewModelTests: XCTestCase {
     // Caso normal: books devuelve todo el catálogo
     func testBooksDevuelveCatalogo() {
         // Arrange
-        let viewModel = CatalogoViewModel(state: makeState(), searchText: "")
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: MockBookService(), searchText: "")
 
         // Act
         let libros = viewModel.books
@@ -34,7 +34,7 @@ final class CatalogoViewModelTests: XCTestCase {
         // Arrange
         let state = makeState()
         state.toggleFavorite(Book.theMiserable)
-        let viewModel = CatalogoViewModel(state: state, searchText: "")
+        let viewModel = CatalogoViewModel(state: state, bookService: MockBookService(), searchText: "")
 
         // Act
         let favoritos = viewModel.favoriteBooks
@@ -46,7 +46,7 @@ final class CatalogoViewModelTests: XCTestCase {
     // Caso límite: búsqueda vacía o con solo espacios no regresa resultados
     func testBusquedaVaciaSinResultados() {
         // Arrange
-        let viewModel = CatalogoViewModel(state: makeState(), searchText: "   ")
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: MockBookService(), searchText: "   ")
 
         // Act
         let resultados = viewModel.searchResults
@@ -58,7 +58,7 @@ final class CatalogoViewModelTests: XCTestCase {
     // Caso normal: busca por título sin importar mayúsculas
     func testBuscaPorTitulo() {
         // Arrange
-        let viewModel = CatalogoViewModel(state: makeState(), searchText: "CIEN años")
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: MockBookService(), searchText: "CIEN años")
 
         // Act
         let resultados = viewModel.searchResults
@@ -70,7 +70,7 @@ final class CatalogoViewModelTests: XCTestCase {
     // Caso normal: busca por autor
     func testBuscaPorAutor() {
         // Arrange
-        let viewModel = CatalogoViewModel(state: makeState(), searchText: "benedetti")
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: MockBookService(), searchText: "benedetti")
 
         // Act
         let resultados = viewModel.searchResults
@@ -82,7 +82,7 @@ final class CatalogoViewModelTests: XCTestCase {
     // Caso sin resultados: un texto que no coincide regresa una lista vacía
     func testBusquedaSinCoincidencias() {
         // Arrange
-        let viewModel = CatalogoViewModel(state: makeState(), searchText: "zzzz")
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: MockBookService(), searchText: "zzzz")
 
         // Act
         let resultados = viewModel.searchResults
@@ -91,3 +91,4 @@ final class CatalogoViewModelTests: XCTestCase {
         XCTAssertTrue(resultados.isEmpty)
     }
 }
+

@@ -16,13 +16,14 @@ final class AppState {
     private let favoritesStore: FavoritesStore
 
     init(
-        books: [Book] = Book.samples,
-        favoritesStore: FavoritesStore = InMemoryFavoritesStore()
+        books: [Book]? = nil,
+        favoritesStore: FavoritesStore? = nil
     ) {
-        self.books = books
-        self.favoritesStore = favoritesStore
-        // Al abrir la app se recuperan los favoritos guardados.
-        self.favorites = favoritesStore.loadFavoriteIDs()
+        let store = favoritesStore ?? InMemoryFavoritesStore()
+        self.books = books ?? Book.samples
+        self.favoritesStore = store
+        //Al abrir la app se recuperan los favoritos guardados
+        self.favorites = store.loadFavoriteIDs()
     }
 
     func isFavorite(_ book: Book) -> Bool {

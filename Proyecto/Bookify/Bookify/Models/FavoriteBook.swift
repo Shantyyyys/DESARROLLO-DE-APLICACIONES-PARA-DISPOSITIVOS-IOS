@@ -2,6 +2,8 @@
 //  FavoriteBook.swift
 //  Bookify
 //
+//  Created by Facultad de Contaduría y Administración on 05/11/26.
+//
 //  Registro persistente de un favorito. Cada vez que el usuario marca
 //  un libro se hace un insert de este modelo en SwiftData.
 //

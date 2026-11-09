@@ -2,6 +2,7 @@
 //  FavoritesStore.swift
 //  Bookify
 //
+//  Created by Facultad de Contaduría y Administración on 05/11/26.
 //  Contrato para guardar favoritos. AppState depende de este protocolo,
 //  no de SwiftData directamente (principio de inversión de dependencias).
 //
