@@ -2,48 +2,66 @@
 //  LoginView.swift
 //  Bookify
 //
+//  Pantalla de bienvenida según el diseño nuevo.
+//  No pide correo ni contraseña: el botón entra directo al catálogo.
+//
 
 import SwiftUI
 
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
-    @State private var email = ""
-    @State private var password = ""
+
+    /// Tamaño del título que crece o se reduce con Dynamic Type.
+    @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 56
+    @ScaledMetric(relativeTo: .title) private var iconSize: CGFloat = 40
 
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        ZStack {
+            // Capa 1: color de fondo
+            Color.bookifyBackground
+                .ignoresSafeArea()
 
-            VStack(spacing: 8) {
+            // Capa 2: ilustración decorativa (ondas y libros)
+            Image("LoginFondo")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+                .accessibilityHidden(true)
+
+            // Capa 3: contenido
+            VStack(spacing: 20) {
                 Text("Bookify")
-                    .font(.largeTitle)
-                    .bold()
+                    .font(.system(size: titleSize, design: .serif))
+                    .foregroundStyle(Color.bookifyText)
+
                 Image(systemName: "book")
-                    .font(.largeTitle)
+                    .font(.system(size: iconSize, weight: .light))
+                    .foregroundStyle(Color.bookifyPrimary)
+                    .accessibilityHidden(true)
+
                 Text("Read more, stress less")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.system(.title3, design: .serif))
+                    .tracking(1.5)
+                    .foregroundStyle(Color.bookifySecondaryText)
+
+                Button {
+                    isLoggedIn = true
+                } label: {
+                    HStack(spacing: 12) {
+                        Text("Start Reading")
+                        Image(systemName: "arrow.right")
+                    }
+                    .font(.system(.title3, design: .serif))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 14)
+                    .background(Color.bookifyPrimary)
+                    .clipShape(Capsule())
+                }
+                .padding(.top, 16)
             }
-
-            VStack(spacing: 12) {
-                TextField("Correo electrónico", text: $email)
-                    .textFieldStyle(.roundedBorder)
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.emailAddress)
-
-                SecureField("Contraseña", text: $password)
-                    .textFieldStyle(.roundedBorder)
-            }
-            .padding(.horizontal, 40)
-
-            Button("Iniciar sesión") {
-                isLoggedIn = true
-            }
-            .buttonStyle(.borderedProminent)
-
-            Spacer()
+            .padding()
         }
-        .padding()
     }
 }
 

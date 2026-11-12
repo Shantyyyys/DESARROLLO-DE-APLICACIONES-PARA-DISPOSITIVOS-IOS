@@ -48,7 +48,7 @@ final class SwiftDataFavoritesStoreTests: XCTestCase {
         let bookId = Book.example.id
 
         // Act
-        sut.store.insert(bookId: bookId)
+        sut.store.insert(book: Book.example)
 
         // Assert
         XCTAssertEqual(sut.store.loadFavoriteIDs(), [bookId])
@@ -58,8 +58,8 @@ final class SwiftDataFavoritesStoreTests: XCTestCase {
     func testDeleteBorraFavorito() throws {
         // Arrange
         let sut = try makeStore()
-        sut.store.insert(bookId: Book.example.id)
-        sut.store.insert(bookId: Book.tregua.id)
+        sut.store.insert(book: Book.example)
+        sut.store.insert(book: Book.tregua)
 
         // Act
         sut.store.delete(bookId: Book.example.id)
@@ -72,10 +72,10 @@ final class SwiftDataFavoritesStoreTests: XCTestCase {
     func testInsertDuplicadoNoSeGuardaDosVeces() throws {
         // Arrange
         let sut = try makeStore()
-        sut.store.insert(bookId: Book.example.id)
+        sut.store.insert(book: Book.example)
 
         // Act
-        sut.store.insert(bookId: Book.example.id)
+        sut.store.insert(book: Book.example)
 
         // Assert
         XCTAssertEqual(try numeroDeRegistros(en: sut.container), 1,
@@ -86,12 +86,24 @@ final class SwiftDataFavoritesStoreTests: XCTestCase {
     func testDeleteDeIdInexistenteNoBorraOtros() throws {
         // Arrange
         let sut = try makeStore()
-        sut.store.insert(bookId: Book.tregua.id)
+        sut.store.insert(book: Book.tregua)
 
         // Act
         sut.store.delete(bookId: "id-que-no-existe")
 
         // Assert
         XCTAssertEqual(sut.store.loadFavoriteIDs(), [Book.tregua.id])
+    }
+
+    // Caso normal: el favorito guarda los datos del libro y se recuperan completos
+    func testInsertGuardaDatosDelLibro() throws {
+        // Arrange
+        let sut = try makeStore()
+
+        // Act
+        sut.store.insert(book: Book.example)
+
+        // Assert
+        XCTAssertEqual(sut.store.loadFavoriteBooks(), [Book.example])
     }
 }

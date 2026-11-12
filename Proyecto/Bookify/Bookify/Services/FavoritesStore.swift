@@ -10,7 +10,9 @@
 @MainActor
 protocol FavoritesStore {
     func loadFavoriteIDs() -> Set<String>
-    func insert(bookId: String)
+    /// Libros guardados, para mostrar Favoritos sin volver a consultar la API.
+    func loadFavoriteBooks() -> [Book]
+    func insert(book: Book)
     func delete(bookId: String)
 }
 
@@ -19,20 +21,29 @@ protocol FavoritesStore {
 @MainActor
 final class InMemoryFavoritesStore: FavoritesStore {
     private(set) var ids: Set<String>
+    private(set) var books: [Book]
 
-    init(initialIDs: Set<String> = []) {
-        self.ids = initialIDs
+    init(initialIDs: Set<String> = [], books: [Book] = []) {
+        self.ids = initialIDs.union(books.map { $0.id })
+        self.books = books
     }
 
     func loadFavoriteIDs() -> Set<String> {
         ids
     }
 
-    func insert(bookId: String) {
-        ids.insert(bookId)
+    func loadFavoriteBooks() -> [Book] {
+        books
+    }
+
+    func insert(book: Book) {
+        guard !ids.contains(book.id) else { return }
+        ids.insert(book.id)
+        books.append(book)
     }
 
     func delete(bookId: String) {
         ids.remove(bookId)
+        books.removeAll { $0.id == bookId }
     }
 }

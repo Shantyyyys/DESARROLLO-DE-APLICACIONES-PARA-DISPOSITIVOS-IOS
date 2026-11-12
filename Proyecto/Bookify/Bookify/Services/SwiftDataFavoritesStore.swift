@@ -22,10 +22,17 @@ final class SwiftDataFavoritesStore: FavoritesStore {
         return Set(saved.map { $0.bookId })
     }
 
-    func insert(bookId: String) {
+    func loadFavoriteBooks() -> [Book] {
+        let descriptor = FetchDescriptor<FavoriteBook>(sortBy: [SortDescriptor(\.addedAt)])
+        let saved = (try? context.fetch(descriptor)) ?? []
+        // Los favoritos guardados antes (solo con el id) no tienen título: se omiten.
+        return saved.filter { !$0.title.isEmpty }.map { $0.book }
+    }
+
+    func insert(book: Book) {
         // Evita guardar el mismo libro dos veces
-        guard !contains(bookId: bookId) else { return }
-        context.insert(FavoriteBook(bookId: bookId))
+        guard !contains(bookId: book.id) else { return }
+        context.insert(FavoriteBook(book: book))
         save()
     }
 

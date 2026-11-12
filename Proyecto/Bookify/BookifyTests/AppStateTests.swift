@@ -77,6 +77,36 @@ final class AppStateTests: XCTestCase {
         XCTAssertFalse(store.ids.contains(Book.example.id), "El favorito debe borrarse del almacén")
     }
 
+    // Límite: con 10 favoritos no se puede agregar el 11.º
+    func testNoAgregaFavoritoConLimiteLleno() {
+        // Arrange
+        let ids = Set((1...AppState.maxFavorites).map { "fav-\($0)" })
+        let state = AppState(books: [Book.example], favoritesStore: InMemoryFavoritesStore(initialIDs: ids))
+
+        // Act
+        let agregado = state.toggleFavorite(Book.example)
+
+        // Assert
+        XCTAssertFalse(agregado)
+        XCTAssertFalse(state.isFavorite(Book.example))
+        XCTAssertEqual(state.favorites.count, AppState.maxFavorites)
+    }
+
+    // Límite: con 10 favoritos sí se puede quitar uno
+    func testQuitaFavoritoConLimiteLleno() {
+        // Arrange
+        var ids = Set((1...(AppState.maxFavorites - 1)).map { "fav-\($0)" })
+        ids.insert(Book.example.id)
+        let state = AppState(books: [Book.example], favoritesStore: InMemoryFavoritesStore(initialIDs: ids))
+
+        // Act
+        let cambiado = state.toggleFavorite(Book.example)
+
+        // Assert
+        XCTAssertTrue(cambiado)
+        XCTAssertFalse(state.isFavorite(Book.example))
+    }
+
     // Al iniciar, AppState recupera los favoritos guardados
     func testCargaFavoritosGuardados() {
         // Arrange
@@ -88,5 +118,31 @@ final class AppStateTests: XCTestCase {
         // Assert
         XCTAssertTrue(state.isFavorite(Book.tregua))
         XCTAssertFalse(state.isFavorite(Book.example))
+    }
+
+    // Al reabrir la app, los favoritos guardados se ven aunque no vengan de la API
+    func testRecuperaLibrosFavoritosGuardados() {
+        // Arrange
+        let store = InMemoryFavoritesStore(books: [Book.tregua])
+
+        // Act
+        let state = AppState(books: [], favoritesStore: store)
+
+        // Assert
+        XCTAssertEqual(state.books, [Book.tregua])
+        XCTAssertTrue(state.isFavorite(Book.tregua))
+    }
+
+    // Marcar un favorito guarda también los datos del libro
+    func testToggleGuardaDatosDelLibro() {
+        // Arrange
+        let store = InMemoryFavoritesStore()
+        let state = AppState(books: [Book.example], favoritesStore: store)
+
+        // Act
+        state.toggleFavorite(Book.example)
+
+        // Assert
+        XCTAssertEqual(store.books, [Book.example])
     }
 }

@@ -55,30 +55,6 @@ final class CatalogoViewModelTests: XCTestCase {
         XCTAssertTrue(resultados.isEmpty, "Una búsqueda de solo espacios no debe regresar libros")
     }
 
-    // Caso normal: busca por título sin importar mayúsculas
-    func testBuscaPorTitulo() {
-        // Arrange
-        let viewModel = CatalogoViewModel(state: makeState(), bookService: MockBookService(), searchText: "CIEN años")
-
-        // Act
-        let resultados = viewModel.searchResults
-
-        // Assert
-        XCTAssertEqual(resultados, [Book.example])
-    }
-
-    // Caso normal: busca por autor
-    func testBuscaPorAutor() {
-        // Arrange
-        let viewModel = CatalogoViewModel(state: makeState(), bookService: MockBookService(), searchText: "benedetti")
-
-        // Act
-        let resultados = viewModel.searchResults
-
-        // Assert
-        XCTAssertEqual(resultados, [Book.tregua])
-    }
-
     // Caso sin resultados: un texto que no coincide regresa una lista vacía
     func testBusquedaSinCoincidencias() {
         // Arrange

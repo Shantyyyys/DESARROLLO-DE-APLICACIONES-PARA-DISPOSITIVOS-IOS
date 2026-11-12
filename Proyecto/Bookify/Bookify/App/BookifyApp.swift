@@ -39,8 +39,10 @@ struct BookifyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(catalogoViewModel: catalogoViewModel)
-                .environment(state)
+            // El state también se inyecta por parámetro, igual que el catálogo.
+            ContentView(state: state, catalogoViewModel: catalogoViewModel)
+                // El diseño solo tiene versión clara: se fuerza en toda la app.
+                .preferredColorScheme(.light)
         }
         .modelContainer(container)
     }
