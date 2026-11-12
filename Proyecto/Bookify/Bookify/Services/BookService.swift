@@ -6,6 +6,8 @@
 //  libros de la respuesta. La comunicación HTTP la delega al APIClient.
 //
 
+// FLUJOS (ver Docs/flujos.md): F2 (tendencias y categorías), F3 (búsqueda), F5 (petición a la API), F6 (resumen)
+
 import Foundation
 
 protocol BookServiceProtocol {
@@ -32,25 +34,47 @@ final class BookService: BookServiceProtocol {
     }
 
     /// GET https://openlibrary.org/trending/daily.json?limit=<n>
+    /// Tendencias no trae páginas, calificación ni temas: se completan con una
+    /// búsqueda por sus claves en search.json (q=key:("/works/A" OR "/works/B" ...)).
     func fetchTrendingBooks() async throws -> [BookDTO] {
+        // [F2.4a] Se piden los 20 libros en tendencia del día.
         let url = try makeURL(path: "/trending/daily.json", queryItems: [
             URLQueryItem(name: "limit", value: "20")
         ])
         let response: TrendingResponseDTO = try await apiClient.get(from: url)
-        return response.works
+        let trending = response.works
+        guard !trending.isEmpty else { return [] }
+
+        // [F2.4b] Se vuelven a pedir esos mismos libros a search.json, en UNA sola
+        // consulta, para tener páginas, calificación y temas (subject → categoría).
+        let keys = trending.map { "\"\($0.key)\"" }.joined(separator: " OR ")
+        do {
+            let complete = try await search(q: "key:(\(keys))", limit: trending.count)
+            // [F2.4c] Se respeta el orden de tendencias; si un libro no vino en la búsqueda, se deja como estaba.
+            return trending.map { work in
+                complete.first { $0.key == work.key } ?? work
+            }
+        } catch {
+            // [F2.4d] Si la búsqueda falla, se muestran las tendencias aunque les falten datos.
+            print("No se pudieron completar las tendencias: \(error)")
+            return trending
+        }
     }
 
     /// GET https://openlibrary.org/search.json?q=<texto>&limit=20&fields=...
+    // [F3.5] Búsqueda escrita: q=<texto>.
     func searchBooks(query: String) async throws -> [BookDTO] {
         try await search(q: query, limit: 20)
     }
 
     /// GET https://openlibrary.org/search.json?q=subject:"<categoría>"&limit=15&fields=...
+    // [F2.9] Carrusel de categoría: q=subject:"<categoría>".
     func fetchBooks(in category: BookCategory) async throws -> [BookDTO] {
         try await search(q: "subject:\"\(category.searchTerm)\"", limit: 15)
     }
 
     /// GET https://openlibrary.org/works/{id}.json → campo "description".
+    // [F6.5] Descripción del libro en /works/{id}.json (puede no existir).
     func fetchSummary(workKey: String) async throws -> String? {
         // workKey ya trae el prefijo, ej. "/works/OL45804W"
         let url = try makeURL(path: "\(workKey).json", queryItems: [])
@@ -61,6 +85,7 @@ final class BookService: BookServiceProtocol {
     // MARK: - Ayudantes
 
     /// Búsqueda compartida por la barra de búsqueda y las categorías.
+    // [F5.1] Arma la URL de search.json con los campos que lee BookDTO y llama al APIClient.
     private func search(q: String, limit: Int) async throws -> [BookDTO] {
         let url = try makeURL(path: "/search.json", queryItems: [
             URLQueryItem(name: "q", value: q),

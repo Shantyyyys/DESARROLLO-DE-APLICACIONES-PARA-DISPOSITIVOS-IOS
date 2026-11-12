@@ -5,6 +5,8 @@
 //  Pantalla principal con el estilo del diseño nuevo.
 //
 
+// FLUJOS (ver Docs/flujos.md): F2 (carga del catálogo), F3 (búsqueda), F4 (menú de categorías), F6 (abrir detalle)
+
 import SwiftUI
 
 struct CatalogoView: View {
@@ -31,11 +33,13 @@ struct CatalogoView: View {
                             searchBar
 
                             // La lista de categorías aparece al tocar el menú
+                            // [F4.2] Con showCategories en true aparece la lista de categorías.
                             if showCategories {
                                 categoriesList(proxy: proxy)
                             }
 
                             // La lista aparece solo mientras se busca
+                            // [F3.6] Si hay texto escrito se muestra la lista de resultados.
                             if viewModel.isSearching {
                                 searchResultsList
                             }
@@ -49,11 +53,13 @@ struct CatalogoView: View {
                         .padding(.horizontal)
 
                         // Los carruseles llegan de orilla a orilla (sin margen externo)
+                        // [F2.6] La vista dibuja "Discover more" según loadState (ver section(for:retry:)).
                         section(for: viewModel.loadState) {
                             await viewModel.loadBooks()
                         }
 
                         // Un carrusel por categoría; el id permite llegar desde el menú.
+                        // [F2.10] Un título y un carrusel por cada categoría, según su propio estado.
                         ForEach(viewModel.categories) { category in
                             VStack(alignment: .leading, spacing: 16) {
                                 sectionTitle(category.title)
@@ -63,6 +69,7 @@ struct CatalogoView: View {
                                     await viewModel.loadBooks(in: category)
                                 }
                             }
+                            // [F4.4] Este id es el destino al que baja proxy.scrollTo(...) en F4.3.
                             .id(category.id)
                         }
                     }
@@ -70,17 +77,25 @@ struct CatalogoView: View {
                 }
             }
             .background(Color.bookifyBackground.ignoresSafeArea())
+            // [F6.2] Al tocar una tarjeta (NavigationLink con el Book) se abre su detalle.
             .navigationDestination(for: Book.self) { book in
                 BookDetailView(book: book, state: state, viewModel: viewModel)
             }
         }
         // Carga inicial: corre sin bloquear la interfaz.
         .task {
+            // [F2.1] Al aparecer la pantalla se pide el catálogo (sin bloquear la interfaz).
             await viewModel.loadCatalog()
         }
         // Busca en la API cada vez que cambia el texto; SwiftUI cancela la búsqueda anterior.
+        // [F3.2] Cada vez que cambia searchText, SwiftUI cancela la tarea anterior
+        // y vuelve a llamar a searchBooks() (ver F3.3).
         .task(id: viewModel.searchText) {
             await viewModel.searchBooks()
+        }
+        // [F4.5] Al empezar a escribir se cierra la lista de categorías.
+        .onChange(of: viewModel.searchText) {
+            showCategories = false
         }
     }
 
@@ -89,6 +104,8 @@ struct CatalogoView: View {
     /// Contenido de una sección (tendencias o categoría) según el estado de su consulta.
     @ViewBuilder
     private func section(for loadState: CatalogoViewModel.LoadState, retry: @escaping () async -> Void) -> some View {
+        // [F2.7] Según el estado: cargando, carrusel, sin resultados o error con Retry
+        // (Retry vuelve a pedir esa sección).
         switch loadState {
         case .loading:
             ProgressView("Loading books...")
@@ -131,6 +148,7 @@ struct CatalogoView: View {
             HStack(spacing: 16) {
                 ForEach(books) { book in
                     NavigationLink(value: book) {
+                        // [F6.1] Cada tarjeta es un NavigationLink que lleva el Book al detalle.
                         cover(de: book)
                     }
                     .buttonStyle(.plain)
@@ -156,6 +174,7 @@ struct CatalogoView: View {
     private var searchBar: some View {
         HStack(spacing: 12) {
             Button {
+                // [F4.1] La hamburguesa abre o cierra la lista de categorías.
                 showCategories.toggle()
             } label: {
                 Image(systemName: "line.3.horizontal")
@@ -163,6 +182,7 @@ struct CatalogoView: View {
             }
             .accessibilityLabel("Categories")
 
+            // [F3.1] Lo que se escribe se guarda en viewModel.searchText.
             TextField("What do you want to read today?", text: $viewModel.searchText)
                 .foregroundStyle(Color.bookifyText)
 
@@ -179,6 +199,7 @@ struct CatalogoView: View {
     /// Lista desplegable de resultados de búsqueda.
     private var searchResultsList: some View {
         VStack(alignment: .leading, spacing: 0) {
+            // [F3.7] La lista muestra cargando, sin resultados, error o los libros encontrados.
             switch viewModel.searchState {
             case .loading:
                 ProgressView()
@@ -227,6 +248,7 @@ struct CatalogoView: View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(viewModel.categories) { category in
                 Button {
+                    // [F4.3] Al elegir una categoría se cierra la lista y se baja hasta su carrusel.
                     showCategories = false
                     // Baja hasta el carrusel de la categoría elegida.
                     withAnimation {

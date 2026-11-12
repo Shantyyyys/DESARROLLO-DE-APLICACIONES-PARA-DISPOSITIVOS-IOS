@@ -25,6 +25,8 @@
 8. ✅ Jueves 12 · Paso 7 · `SettingsView` (nuevo) según el diseño (§5 de `diseno-nuevo.md`): tarjetas Mode, Language y About Us. Mode (claro/oscuro) y Language (English/Spanish) abren una pantalla con las opciones desactivadas ("Coming soon"); About Us muestra la foto del equipo (`AboutUsPhoto`, antes en el set duplicado `Applcon.appiconset`, que se quitó) y la descripción de Bookify (#10, #17). La preferencia grid/list solo se cambia desde Favoritos.
 9. ✅ Jueves 12 · Paso 8 · Interfaz en inglés (#21): catálogo, detalle, mensajes de error e idiomas del modelo ("Spanish", "English", "Unknown", "Unknown author"); `BookMappingTests` actualizado. Duplicados (#5): la portada con AsyncImage del catálogo y de Favoritos ahora es la vista compartida `BookCoverImage` (nuevo). Se quitaron los libros de ejemplo de la app (`Book.samples`): `AppState` empieza sin libros y los `#Preview` usan `MockBookService`; las pruebas usan los mismos libros desde `BookifyTests/BookFixtures.swift` (nuevo).
 
+10b. ✅ Jueves 12, 5 pm · Ajustes tras compilar en la Mac: tendencias completadas con `search.json` (páginas, calificación, categoría); "—" cuando no hay páginas o calificación; portada del detalle con su forma (360 de alto, sin tarjeta ancha); el menú de categorías se cierra al escribir. Comentarios de flujo `[F#.#]` en todo el código de la app y `Docs/flujos.md` (F1–F10).
+
 ## Con Mac
 Lista detallada para revisar en la Mac: `Docs/pendientes-mac.md` (se actualiza en cada paso; antes de usar la Mac se entrega en PDF).
 

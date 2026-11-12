@@ -4,6 +4,7 @@
 //
 //  Created by Facultad de Contaduría y Administración on 24/09/26.
 //
+// FLUJOS (ver Docs/flujos.md): F5 (conversión DTO → Book)
 
 struct Book: Identifiable, Hashable {
     /// Identificador único. Con la API es el `key` del work (ej. "/works/OL274505W").
@@ -27,6 +28,7 @@ extension Book {
     /// Convierte el DTO de Open Library al modelo de dominio.
     /// - Parameter category: si el libro se pidió desde una categoría, se usa esa;
     ///   si no, se busca la primera que coincida con sus `subjects`.
+    // [F5.7] Convierte el DTO (datos de la API, opcionales) en Book (datos listos para mostrar).
     init(from dto: BookDTO, category: BookCategory? = nil) {
         self.id = dto.key
         self.title = dto.title

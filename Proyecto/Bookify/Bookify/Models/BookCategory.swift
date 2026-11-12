@@ -7,6 +7,7 @@
 //  `subject:` en search.json. La misma lista alimenta el menú de hamburguesa
 //  y los carruseles del catálogo.
 //
+// FLUJOS (ver Docs/flujos.md): F2 (categorías), F4 (menú), F5 (categoría de un libro)
 
 enum BookCategory: String, CaseIterable, Identifiable {
     case fantasy
@@ -60,6 +61,7 @@ enum BookCategory: String, CaseIterable, Identifiable {
     static let uncategorizedTitle = "Uncategorized"
 
     /// Primera categoría de la lista (en orden) que coincide con los subjects del libro.
+    // [F5.8] Si el libro no viene de un carrusel, su categoría se deduce de sus subjects.
     static func matching(subjects: [String]?) -> BookCategory? {
         guard let subjects, !subjects.isEmpty else { return nil }
         let lowercased = subjects.map { $0.lowercased() }

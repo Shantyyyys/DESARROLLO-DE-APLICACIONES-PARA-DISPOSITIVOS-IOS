@@ -6,6 +6,8 @@
 //  muestran la idea (opciones desactivadas); About Us muestra al equipo.
 //
 
+// FLUJOS (ver Docs/flujos.md): F10 (configuración)
+
 import SwiftUI
 
 struct SettingsView: View {
@@ -13,6 +15,7 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    // [F10.1] Tres tarjetas; cada una es un NavigationLink a su pantalla.
                     Text("Settings")
                         .font(.system(.largeTitle, design: .serif))
                         .foregroundStyle(Color.bookifyText)
@@ -104,6 +107,7 @@ private struct ComingSoonOptionsView: View {
                             .font(.system(.body, design: .serif))
                             .foregroundStyle(Color.bookifyText)
                         Spacer()
+                        // [F10.2] Mode y Language solo muestran la idea: la primera opción marcada, la otra desactivada.
                         if option == options.first {
                             Image(systemName: "checkmark")
                                 .foregroundStyle(Color.bookifyPrimary)
@@ -138,6 +142,7 @@ private struct AboutUsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
+                // [F10.3] About Us: foto del equipo (Assets) y descripción de la app.
                 Image("AboutUsPhoto")
                     .resizable()
                     .scaledToFit()

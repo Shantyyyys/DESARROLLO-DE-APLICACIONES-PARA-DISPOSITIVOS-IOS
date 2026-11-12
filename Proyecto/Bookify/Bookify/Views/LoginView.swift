@@ -6,6 +6,8 @@
 //  No pide correo ni contraseña: el botón entra directo al catálogo.
 //
 
+// FLUJOS (ver Docs/flujos.md): F1 (arranque)
+
 import SwiftUI
 
 struct LoginView: View {
@@ -45,6 +47,7 @@ struct LoginView: View {
                     .foregroundStyle(Color.bookifySecondaryText)
 
                 Button {
+                    // [F1.7] Cambia isLoggedIn: ContentView se redibuja y muestra las pestañas.
                     isLoggedIn = true
                 } label: {
                     HStack(spacing: 12) {

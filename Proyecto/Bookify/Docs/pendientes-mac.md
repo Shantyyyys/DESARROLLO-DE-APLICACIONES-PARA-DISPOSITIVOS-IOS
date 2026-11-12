@@ -62,7 +62,14 @@ Lista de lo que hay que hacer y revisar con la Mac (jueves 12, 4 pm). Se va llen
 - [ ] El detalle muestra "Author:", "Published:", "Category:", "Language:" y "N pages"; el idioma sale como "Spanish", "English" o el código del idioma.
 - [ ] Las portadas del catálogo y de Favoritos se siguen viendo igual (ahora usan `BookCoverImage`).
 
-## 10. Limpieza y entrega
+## 10. Ajustes después de compilar (12 nov, 5 pm)
+- [ ] Tendencias: los libros de "Discover more" ya muestran páginas, calificación y categoría (se completan con `search.json`). Si siguen en "— pages", revisar en Safari: `https://openlibrary.org/search.json?q=key:("/works/OL82563W")&fields=key,title,number_of_pages_median`.
+- [ ] Detalle: sin páginas o sin calificación se ve "—" en lugar de 0.
+- [ ] Detalle: la portada se ve con su forma (más alta) y sin la tarjeta beige ancha.
+- [ ] Menú de categorías: se cierra al empezar a escribir.
+- [ ] Comentarios de flujo `[F#.#]` en el código y `Docs/flujos.md`: que compile igual (solo son comentarios).
+
+## 11. Limpieza y entrega
 - [ ] Quitar saltos de línea con ruido (#3), la carpeta `Claude outputs` y archivos temporales.
 - [ ] Revisar el diff del PR: el cuerpo de `CatalogoView` sale reindentado por el `ScrollViewReader` (es esperado).
 - [ ] Capturas de pantalla de la app funcionando.

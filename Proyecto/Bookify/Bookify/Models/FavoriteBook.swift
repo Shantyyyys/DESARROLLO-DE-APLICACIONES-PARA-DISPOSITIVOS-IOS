@@ -9,6 +9,8 @@
 //  del libro para que Favoritos se vea completo al reabrir la app.
 //
 
+// FLUJOS (ver Docs/flujos.md): F7 (guardar favorito), F9 (favoritos al reabrir)
+
 import Foundation
 import SwiftData
 
@@ -29,6 +31,7 @@ final class FavoriteBook {
     var coverUrl: String = ""
     var firstSentence: String = ""
 
+    // [F7.4] Copia los datos del libro al registro que se guarda.
     init(book: Book, addedAt: Date = .now) {
         self.bookId = book.id
         self.addedAt = addedAt
@@ -44,6 +47,7 @@ final class FavoriteBook {
     }
 
     /// Reconstruye el libro para mostrarlo en Favoritos y en el detalle.
+    // [F9.2] Al reabrir la app, el registro vuelve a convertirse en Book.
     var book: Book {
         Book(
             id: bookId,

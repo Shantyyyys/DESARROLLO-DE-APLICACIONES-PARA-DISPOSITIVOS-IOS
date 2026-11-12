@@ -3,9 +3,12 @@
 //  Bookify
 //
 
+// FLUJOS (ver Docs/flujos.md): F5 (forma del JSON)
+
 import Foundation
 
 /// Respuesta completa de https://openlibrary.org/search.json
+// [F5.6] Estas estructuras tienen la misma forma que el JSON; JSONDecoder las llena.
 struct BookSearchResponseDTO: Decodable {
     let docs: [BookDTO]
 }

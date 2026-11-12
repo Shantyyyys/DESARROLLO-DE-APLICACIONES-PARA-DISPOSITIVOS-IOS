@@ -6,6 +6,8 @@
 //  Un favorito se quita desde el detalle del libro.
 //
 
+// FLUJOS (ver Docs/flujos.md): F8 (pestaña Favoritos), F6 (abrir detalle)
+
 import SwiftUI
 
 struct FavoritesView: View {
@@ -26,6 +28,7 @@ struct FavoritesView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     header
 
+                    // [F8.1] Sin favoritos: mensaje. Con favoritos: cuadrícula o lista según AppState.
                     if viewModel.favoriteBooks.isEmpty {
                         Text("No favorites yet. Tap the bookmark on a book to save it.")
                             .font(.subheadline)
@@ -39,6 +42,7 @@ struct FavoritesView: View {
                 .padding()
             }
             .background(Color.bookifyBackground.ignoresSafeArea())
+            // [F8.4] Tocar un favorito abre su detalle (F6); ahí se puede desmarcar (F7).
             .navigationDestination(for: Book.self) { book in
                 BookDetailView(book: book, state: state, viewModel: viewModel)
             }
@@ -71,6 +75,7 @@ struct FavoritesView: View {
 
     private func layoutButton(_ layout: FavoritesLayout, systemImage: String, label: String) -> some View {
         Button {
+            // [F8.3] El selector cambia la preferencia y la vista se redibuja.
             state.favoritesLayout = layout
         } label: {
             Image(systemName: systemImage)

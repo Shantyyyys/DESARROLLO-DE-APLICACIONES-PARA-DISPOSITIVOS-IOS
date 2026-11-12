@@ -5,6 +5,8 @@
 //  Detalle del libro con el estilo del diseño nuevo.
 //
 
+// FLUJOS (ver Docs/flujos.md): F6 (detalle y resumen), F7 (marcar favorito)
+
 import SwiftUI
 
 struct BookDetailView: View {
@@ -55,15 +57,19 @@ struct BookDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    // [F7.1] El marcador llama a toggleFavorite. Si regresa false (límite lleno),
+                    // se muestra el aviso (F7.5).
                     if !state.toggleFavorite(book) {
                         showLimitAlert = true
                     }
                 } label: {
+                    // [F7.6] El ícono se actualiza solo porque AppState es @Observable.
                     Image(systemName: state.isFavorite(book) ? "bookmark.fill" : "bookmark")
                 }
                 .accessibilityLabel(state.isFavorite(book) ? "Remove from favorites" : "Add to favorites")
             }
         }
+        // [F7.5] Aviso cuando ya hay 10 favoritos.
         .alert("Favorites limit reached", isPresented: $showLimitAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -71,30 +77,34 @@ struct BookDetailView: View {
         }
         // Carga el resumen sin bloquear la interfaz.
         .task {
+            // [F6.3] Al abrir el detalle se pide el resumen; mientras llega se ve un indicador de carga.
             summary = await viewModel.loadSummary(for: book)
         }
     }
 
     // MARK: - Partes de la vista
 
-    /// Tarjeta de portada: la portada de Covers API o, si no hay, el ícono provisional.
+    /// Portada con su propia forma (más alta que ancha), centrada.
+    /// Si no hay portada, el ícono provisional en un rectángulo con forma de libro.
     private var coverCard: some View {
         AsyncImage(url: URL(string: book.coverUrl)) { image in
             image
                 .resizable()
                 .scaledToFit()
-                .padding()
+                .clipShape(RoundedRectangle(cornerRadius: 12))
         } placeholder: {
             Image(systemName: "book.closed")
                 .resizable()
                 .scaledToFit()
                 .foregroundStyle(Color.bookifyCoverIcon)
                 .padding(40)
+                .frame(width: 220, height: 330)
+                .background(Color.bookifyCard)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .frame(maxWidth: .infinity, maxHeight: 280)
-        .background(Color.bookifyCard)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .black.opacity(0.06), radius: 10, y: 4)
+        .frame(height: 360)
+        .frame(maxWidth: .infinity)
+        .shadow(color: .black.opacity(0.12), radius: 12, y: 6)
         .accessibilityHidden(true)
     }
 
@@ -105,6 +115,7 @@ struct BookDetailView: View {
                 .font(.system(.title3, design: .serif))
                 .foregroundStyle(Color.bookifyText)
 
+            // [F6.6] Cuando llega el resumen, se muestra el texto.
             if let summary {
                 Text(summary)
                     .font(.subheadline)
@@ -119,7 +130,7 @@ struct BookDetailView: View {
     /// Fila: páginas · formato · calificación.
     private var statsRow: some View {
         HStack {
-            Text("\(book.pages) pages")
+            Text(book.pages > 0 ? "\(book.pages) pages" : "— pages")
 
             Spacer()
 
@@ -131,7 +142,12 @@ struct BookDetailView: View {
             Spacer()
 
             HStack(spacing: 4) {
-                Text(book.rating, format: .number.precision(.fractionLength(1)))
+                // Si la API no trae calificación (0), se muestra "—" en lugar de "0.0".
+                if book.rating > 0 {
+                    Text(book.rating, format: .number.precision(.fractionLength(1)))
+                } else {
+                    Text("—")
+                }
                 Image(systemName: "star")
                     .accessibilityHidden(true)
             }

@@ -6,6 +6,8 @@
 //  el estado de cada sección (tendencias, categorías y búsqueda) y los favoritos.
 //
 
+// FLUJOS (ver Docs/flujos.md): F2 (carga del catálogo), F3 (búsqueda), F6 (resumen), F8 (lista de favoritos)
+
 import Foundation
 import Observation
 
@@ -48,6 +50,7 @@ final class CatalogoViewModel {
     // MARK: - Carga inicial
 
     /// Carga el catálogo. Al regresar a la pestaña Inicio solo pide lo que falta.
+    // [F2.2] Pide las tendencias si aún no hay y luego las categorías que falten.
     func loadCatalog() async {
         switch loadState {
         case .content:
@@ -63,10 +66,12 @@ final class CatalogoViewModel {
     func loadBooks() async {
         loadState = .loading
         do {
+            // [F2.3] Pide las tendencias al servicio (ver F2.4 y F5).
             let dtos = try await bookService.fetchTrendingBooks()
             let books = dtos.map { Book(from: $0) }
             // Los libros se comparten con AppState para que favoritos y detalle los usen.
             remember(books)
+            // [F2.5] Cambia loadState: como la clase es @Observable, la vista se redibuja sola.
             loadState = books.isEmpty ? .empty : .content(books)
         } catch {
             // Se canceló porque el usuario cambió de pestaña: se reintenta al volver.
@@ -86,6 +91,7 @@ final class CatalogoViewModel {
 
     /// Carga los carruseles uno por uno, en el orden de la lista.
     /// Los que ya tienen libros no se vuelven a pedir.
+    // [F2.8] Recorre las 8 categorías en orden y pide cada carrusel.
     func loadCategories() async {
         for category in categories {
             if case .content = state(for: category) { continue }
@@ -99,6 +105,7 @@ final class CatalogoViewModel {
         do {
             let dtos = try await bookService.fetchBooks(in: category)
             // El libro viene de un carrusel de categoría: se usa esa categoría.
+            // [F2.9] Convierte cada DTO en Book con la categoría del carrusel y actualiza su estado.
             let books = dtos.map { Book(from: $0, category: category) }
             remember(books)
             categoryStates[category] = books.isEmpty ? .empty : .content(books)
@@ -125,6 +132,7 @@ final class CatalogoViewModel {
 
     /// La vista la llama con `.task(id: searchText)`: cada vez que cambia el texto,
     /// SwiftUI cancela la búsqueda anterior y arranca una nueva.
+    // [F3.3] Búsqueda en toda la API. Si el texto está vacío, no busca.
     func searchBooks() async {
         let query = searchText.trimmingCharacters(in: .whitespaces)
         guard !query.isEmpty else {
@@ -135,12 +143,15 @@ final class CatalogoViewModel {
 
         // Espera a que el usuario deje de escribir; si escribe otra letra, se cancela aquí.
         do {
+            // [F3.4] Espera 500 ms. Si el usuario escribe otra letra antes, la tarea se cancela aquí
+            // y no se hace la petición (así no se satura la API).
             try await Task.sleep(for: .milliseconds(500))
         } catch {
             return
         }
 
         do {
+            // [F3.5] Pide los resultados (q=<texto> en search.json) y actualiza searchState.
             let dtos = try await bookService.searchBooks(query: query)
             // Si el texto cambió mientras llegaba la respuesta, se descarta.
             guard !Task.isCancelled else { return }
@@ -161,6 +172,7 @@ final class CatalogoViewModel {
     static let noSummaryText = "No summary available"
 
     /// Resumen del detalle: descripción del work → primera frase → aviso.
+    // [F6.4] Regla del resumen: descripción del work → primera frase → "No summary available".
     func loadSummary(for book: Book) async -> String {
         // Solo los libros de la API tienen un work que consultar (ej. "/works/OL45804W").
         if book.id.hasPrefix("/works/") {
@@ -183,6 +195,7 @@ final class CatalogoViewModel {
         state.books
     }
 
+    // [F8.2] Favoritos = libros conocidos cuyo id está en AppState.favorites.
     var favoriteBooks: [Book] {
         state.books.filter { state.isFavorite($0) }
     }
@@ -191,6 +204,8 @@ final class CatalogoViewModel {
 
     /// Agrega a AppState los libros que aún no tiene, para que favoritos y
     /// detalle los encuentren sin importar de qué sección vinieron.
+    // [F2.5/F3.5] Todos los libros que llegan se guardan en AppState sin duplicados,
+    // para que favoritos y detalle los encuentren vengan de donde vengan.
     private func remember(_ newBooks: [Book]) {
         let knownIDs = Set(state.books.map { $0.id })
         let unknown = newBooks.filter { !knownIDs.contains($0.id) }
