@@ -108,6 +108,67 @@ final class CatalogoViewModelLoadTests: XCTestCase {
             return XCTFail("Al reintentar debe mostrar contenido")
         }
     }
+
+    // Búsqueda: con texto escrito, consulta la API y muestra lo que devuelve
+    func testSearchBooksConsultaLaAPI() async {
+        // Arrange
+        let state = makeState()
+        let mock = MockBookService(booksToReturn: MockBookService.sampleDTOs)
+        let viewModel = CatalogoViewModel(state: state, bookService: mock, searchText: "garcia marquez")
+        let esperados = MockBookService.sampleDTOs.map { Book(from: $0) }
+
+        // Act
+        await viewModel.searchBooks()
+
+        // Assert
+        XCTAssertEqual(viewModel.searchState, .content(esperados))
+        XCTAssertEqual(viewModel.searchResults, esperados)
+        XCTAssertEqual(state.books, esperados, "Los resultados deben compartirse con AppState")
+    }
+
+    // Resumen: si el work tiene descripción, se usa la descripción
+    func testLoadSummaryUsaLaDescripcion() async {
+        // Arrange
+        let mock = MockBookService(summaryToReturn: "Una descripción")
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: mock)
+        let libro = Book(from: MockBookService.sampleDTOs[0])
+
+        // Act
+        let resumen = await viewModel.loadSummary(for: libro)
+
+        // Assert
+        XCTAssertEqual(resumen, "Una descripción")
+    }
+
+    // Resumen: sin descripción, se usa la primera frase del libro
+    func testLoadSummarySinDescripcionUsaPrimeraFrase() async {
+        // Arrange
+        let mock = MockBookService(summaryToReturn: nil)
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: mock)
+        var dto = MockBookService.sampleDTOs[0]
+        dto.firstSentence = OpenLibraryText(value: "Primera frase.")
+        let libro = Book(from: dto)
+
+        // Act
+        let resumen = await viewModel.loadSummary(for: libro)
+
+        // Assert
+        XCTAssertEqual(resumen, "Primera frase.")
+    }
+
+    // Resumen: si la API falla y no hay primera frase, se muestra el aviso
+    func testLoadSummarySinDatosMuestraAviso() async {
+        // Arrange
+        let mock = MockBookService(error: MockBookServiceError.loadingFailed)
+        let viewModel = CatalogoViewModel(state: makeState(), bookService: mock)
+        let libro = Book(from: MockBookService.sampleDTOs[0])
+
+        // Act
+        let resumen = await viewModel.loadSummary(for: libro)
+
+        // Assert
+        XCTAssertEqual(resumen, CatalogoViewModel.noSummaryText)
+    }
 }
 
 /// Servicio de prueba que devuelve un resultado distinto en cada llamada.
@@ -118,7 +179,19 @@ private final class SecuenciaBookService: BookServiceProtocol {
         self.resultados = resultados
     }
 
-    func fetchBooks() async throws -> [BookDTO] {
+    func fetchTrendingBooks() async throws -> [BookDTO] {
         try resultados.removeFirst().get()
+    }
+
+    func searchBooks(query: String) async throws -> [BookDTO] {
+        try resultados.removeFirst().get()
+    }
+
+    func fetchBooks(in category: BookCategory) async throws -> [BookDTO] {
+        try resultados.removeFirst().get()
+    }
+
+    func fetchSummary(workKey: String) async throws -> String? {
+        nil
     }
 }

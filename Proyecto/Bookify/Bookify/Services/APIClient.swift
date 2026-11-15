@@ -5,7 +5,6 @@
 //  Cliente HTTP genérico: hace la petición, valida la respuesta y decodifica el JSON.
 //  No sabe nada de libros; el BookService le dice qué tipo quiere recibir.
 //
-
 import Foundation
 
 /// Errores posibles al comunicarse con la API.
@@ -31,12 +30,14 @@ final class APIClient: APIClientProtocol {
         self.decoder = decoder
     }
 
+    // [F5.2] Petición GET genérica: los pasos F5.3 a F5.6 se hacen en orden;
+    // si uno falla, se lanza un APIError y el ViewModel lo muestra como error.
     func get<T: Decodable>(from url: URL) async throws -> T {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-        // 1. Ejecutar la petición (errores de conectividad)
+        // [F5.3] 1. Ejecutar la petición (errores de conectividad)
         let data: Data
         let response: URLResponse
         do {
@@ -45,17 +46,17 @@ final class APIClient: APIClientProtocol {
             throw APIError.connectivity(urlError)
         }
 
-        // 2. Validar que sea una respuesta HTTP
+        // [F5.4] 2. Validar que sea una respuesta HTTP
         guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.invalidResponse
         }
 
-        // 3. Validar el código de estado
+        // [F5.5] 3. Validar el código de estado
         guard (200...299).contains(httpResponse.statusCode) else {
             throw APIError.httpError(statusCode: httpResponse.statusCode)
         }
 
-        // 4. Decodificar el JSON al tipo pedido
+        // [F5.6] 4. Decodificar el JSON al tipo pedido
         do {
             return try decoder.decode(T.self, from: data)
         } catch {

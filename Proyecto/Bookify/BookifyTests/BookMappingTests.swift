@@ -32,7 +32,7 @@ final class BookMappingTests: XCTestCase {
         XCTAssertEqual(book.id, "/works/OL1W")
         XCTAssertEqual(book.author, "Gabriel García Márquez")
         XCTAssertEqual(book.year, 1981)
-        XCTAssertEqual(book.language, "Español")
+        XCTAssertEqual(book.language, "Spanish")
         XCTAssertEqual(book.pages, 120)
         XCTAssertEqual(book.coverUrl, "https://covers.openlibrary.org/b/id/123-L.jpg")
     }
@@ -54,9 +54,9 @@ final class BookMappingTests: XCTestCase {
         let book = Book(from: dto)
 
         // Assert
-        XCTAssertEqual(book.author, "Autor desconocido")
+        XCTAssertEqual(book.author, "Unknown author")
         XCTAssertEqual(book.year, 0)
-        XCTAssertEqual(book.language, "Desconocido")
+        XCTAssertEqual(book.language, "Unknown")
         XCTAssertEqual(book.pages, 0)
         XCTAssertEqual(book.coverUrl, "")
     }

@@ -1,9 +1,8 @@
-///
+//
 //  SwiftDataFavoritesStore.swift
 //  Bookify
 //
 //  Guarda los favoritos en el dispositivo con SwiftData (inserts y deletes).
-//
 
 import Foundation
 import SwiftData
@@ -16,16 +15,26 @@ final class SwiftDataFavoritesStore: FavoritesStore {
         self.context = context
     }
 
+    // [F9.1] Lee los ids de todos los favoritos guardados.
     func loadFavoriteIDs() -> Set<String> {
         let descriptor = FetchDescriptor<FavoriteBook>()
         let saved = (try? context.fetch(descriptor)) ?? []
         return Set(saved.map { $0.bookId })
     }
 
-    func insert(bookId: String) {
+    // [F9.2] Lee los favoritos completos en el orden en que se marcaron.
+    func loadFavoriteBooks() -> [Book] {
+        let descriptor = FetchDescriptor<FavoriteBook>(sortBy: [SortDescriptor(\.addedAt)])
+        let saved = (try? context.fetch(descriptor)) ?? []
+        // Los favoritos guardados antes (solo con el id) no tienen título: se omiten.
+        return saved.filter { !$0.title.isEmpty }.map { $0.book }
+    }
+
+    // [F7.4] Guarda el favorito (con los datos del libro) en SwiftData.
+    func insert(book: Book) {
         // Evita guardar el mismo libro dos veces
-        guard !contains(bookId: bookId) else { return }
-        context.insert(FavoriteBook(bookId: bookId))
+        guard !contains(bookId: book.id) else { return }
+        context.insert(FavoriteBook(book: book))
         save()
     }
 
@@ -38,6 +47,7 @@ final class SwiftDataFavoritesStore: FavoritesStore {
         return count > 0
     }
 
+    // [F7.4] Borra el favorito de SwiftData.
     func delete(bookId: String) {
         let id = bookId
         let descriptor = FetchDescriptor<FavoriteBook>(
