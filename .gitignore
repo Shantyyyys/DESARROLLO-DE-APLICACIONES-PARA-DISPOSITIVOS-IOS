@@ -1,0 +1,11 @@
+# Archivos de usuario de Xcode (configuración personal de cada equipo)
+xcuserdata/
+*.xcuserstate
+
+# Archivos de compilación
+DerivedData/
+build/
+
+# Archivos del sistema macOS
+.DS_Store
+__MACOSX/
